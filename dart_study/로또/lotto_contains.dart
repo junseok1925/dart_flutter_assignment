@@ -1,16 +1,27 @@
 import 'dart:math';
 
 void main() {
-  Set<int> prizeNum = {9, 19, 29, 35, 37, 38};
+  // 당첨 번호
+  List<int> prizeNum = [9, 19, 29, 35, 37, 38];
+  // 중복없는 내 로또 번호
   List<int> myNum = [];
+  // 당첨된 번호
   List<int> matchNum = [];
 
   var randomInt = Random().nextInt;
 
+  // 중복없는 로또 번호 6개 발급
   while (myNum.length < 6) {
     int num = randomInt(45) + 1;
     if (!myNum.contains(num)) {
       myNum.add(num);
+    }
+  }
+
+  // 당첨 번호와 비교
+  for (var num in myNum) {
+    if (prizeNum.contains(num)) {
+      matchNum.add(num);
     }
   }
 

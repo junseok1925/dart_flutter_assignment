@@ -4,6 +4,7 @@ import 'dart:math';
 Set<int> randomLottoNumbers(int cnt) {
   var random = Random();
   Set<int> numbers = {};
+
   while (numbers.length < cnt) {
     numbers.add(random.nextInt(45) + 1);
   }
@@ -12,9 +13,7 @@ Set<int> randomLottoNumbers(int cnt) {
 
 // 당첨번호와 랜덤 로또 번호를 비교해서 맞춘 번호를 반환하는 함수
 List<int> matchNumbers(Set<int> myNum, Set<int> prizeNum) {
-  return myNum
-      .intersection(prizeNum)
-      .toList(); // intersection : Map() 메서드, 교집합을 구함
+  return myNum.intersection(prizeNum).toList();
 }
 
 // matchNumbers 함수 결과에 따라 맞춘 번호 갯수대로 등수(랭크)를 반환하는 함수

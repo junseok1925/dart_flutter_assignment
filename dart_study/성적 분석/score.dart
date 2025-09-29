@@ -9,7 +9,20 @@ class Score {
   }
 }
 
+class StudentScore extends Score {
+  String name;
+  String subject;
+
+  // 생성자에서 부모 생성자 호출
+  StudentScore(this.name, this.subject, int score) : super(score);
+  @override
+  void show() {
+    super.showInfo();
+    print('이름: $name, 점수: $subject');
+  }
+}
+
 void main() {
-  Score score = Score(95);
-  score.showInfo();
+  StudentScore student = StudentScore('강준석', '수학', 95);
+  student.show();
 }

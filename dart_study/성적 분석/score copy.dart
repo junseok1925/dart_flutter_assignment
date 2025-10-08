@@ -1,23 +1,11 @@
 import 'dart:io';
 
-class OnlyScore {
+class Student {
+  String name;
   int score;
 
-  // 생성자
-  OnlyScore(this.score);
+  Student(this.name, this.score);
 
-  // 정보 출력
-  void showInfo() {
-    print('점수: $score');
-  }
-}
-
-class StudentScore extends OnlyScore {
-  String name;
-  // 생성자에서 부모 생성자 호출
-  StudentScore(this.name, int score) : super(score);
-
-  @override
   void showInfo() {
     print('이름: $name,점수: $score');
   }
@@ -25,60 +13,63 @@ class StudentScore extends OnlyScore {
 
 // csv파일에서 학생 데이터 가져오기
 Map<String, int> loadStudentData(String filePath) {
-  Map<String, int> studentsMap = {};
+  Map<String, int> studentMap = {};
   try {
     final file = File(filePath);
-    final lines = file.readAsLinesSync(); // -> csv파일의 각 줄을 리스트로 가져옴
-    // print(lines);
+    final line = file.readAsLinesSync(); // -> csv파일의 각 줄을 리스트로 가져옴
 
-    for (var line in lines) {
+    for (var line in line) {
       final parts = line.split(',');
-      if (parts.length != 2) throw FormatException('잘못된 데이터 형식: $line');
-
+      if (parts.length != 2) {
+        throw FormatException('잘못된 데이터 형식: $line');
+      }
       String name = parts[0];
       int score = int.parse(parts[1]);
 
-      studentsMap.putIfAbsent(name, () => score);
+      studentMap.putIfAbsent(name, () => score);
     }
-    // print(studentsMap);
   } catch (e) {
-    print("csv파일에서 점수 데이터 가져오기 실패: $e");
+    print("학생 데이터 가져오기 실패 $e");
     exit(1);
   }
 
-  return studentsMap;
+  print('csv파일에서 가져온 학생 점수 데이터 : $studentMap');
+
+  return studentMap;
+}
+
+void writeFile(String filename, String content) {
+  final file = File(filename);
+  file.writeAsStringSync(content);
+  print('$filename 파일이 생성되었습니다.');
 }
 
 void main() {
   String filePath = 'score.csv';
-
   Map<String, int> studentData = loadStudentData(filePath);
 
-  // print("전체 학생 점수: $studentData");
-
-  // 학생 이름 입력 받기
-  print('학생 이름을 입력하시오 : ');
-  String? inputName = stdin
-      .readLineSync(); // 디버그 콘솔에서 입력 안됨, dart run 명령어로 터미널에서 실행 후 입력가능
   while (true) {
-    if (inputName != null && inputName.isNotEmpty) {
-      break; // 입력이 유효하면 반복 종료
+    print('어떤 학생의 점수를 확인하시겠습니까? (그만하려면 exit or 종료 입력): ');
+    String? inputName = stdin.readLineSync();
+
+    if (inputName == null || inputName.isEmpty) continue;
+
+    // 종료기능
+    if (inputName == 'exit' || inputName == '종료') {
+      print('종료합니다.');
+      break;
     }
-  }
-  print('입력한 텍스트 : $inputName');
+    ;
 
-  String searchName = inputName;
-
-  while (true) {
-    if (inputName != null && inputName.isNotEmpty) {
-      break; // 입력이 유효하면 반복 종료
+    if (studentData.containsKey(inputName)) {
+      print('$inputName 학생의 점수는 ${studentData[inputName]}점 입니다.');
+      writeFile(
+        '$inputName.csv',
+        '$inputName 학생의 점수는 ${studentData[inputName]}점 입니다.',
+      );
+      print('생성된 파일 이름은 : $inputName');
+    } else {
+      print('$inputName 학생은 없는 학생입니다.');
     }
-  }
-
-  if (studentData.containsKey(searchName)) {
-    print('$searchName 학생의 점수는 ${studentData[searchName]}입니다.');
-  } else {
-    print('$searchName는 없는 학생입니다.');
-    return main();
   }
 }

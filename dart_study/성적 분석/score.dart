@@ -38,6 +38,12 @@ Map<String, int> loadStudentData(String filePath) {
   return studentMap;
 }
 
+void writeFile(String filename, String content) {
+  final file = File(filename);
+  file.writeAsString(content);
+  print('$filename 파일이 생성되었습니다.');
+}
+
 void main() {
   String filePath = 'score.csv';
   Map<String, int> studentData = loadStudentData(filePath);
@@ -57,6 +63,11 @@ void main() {
 
     if (studentData.containsKey(inputName)) {
       print('$inputName 학생의 점수는 ${studentData[inputName]}점 입니다.');
+      writeFile(
+        '$inputName',
+        '$inputName 학생의 점수는 ${studentData[inputName]}점 입니다.',
+      );
+      print('생성된 파일 이름은 : $inputName');
     } else {
       print('$inputName 학생은 없는 학생입니다.');
     }

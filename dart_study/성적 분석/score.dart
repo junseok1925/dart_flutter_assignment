@@ -39,9 +39,13 @@ Map<String, int> loadStudentData(String filePath) {
 }
 
 void writeFile(String filename, String content) {
-  final file = File(filename);
-  file.writeAsStringSync(content);
-  print('$filename 파일이 생성되었습니다.');
+  try {
+    final file = File(filename);
+    file.writeAsStringSync(content);
+    print('$filename 파일이 생성되었습니다.');
+  } catch (e) {
+    print('파일 생성 실패: $e');
+  }
 }
 
 void main() {

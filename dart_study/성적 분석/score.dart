@@ -33,7 +33,7 @@ Map<String, int> loadStudentData(String filePath) {
     exit(1);
   }
 
-  print(studentMap);
+  print('csv파일에서 가져온 학생 점수 데이터 : $studentMap');
 
   return studentMap;
 }
@@ -42,17 +42,17 @@ void main() {
   String filePath = 'score.csv';
   Map<String, int> studentData = loadStudentData(filePath);
 
-  print('학생 이름을 적으시오 : ');
-  String? inputName = stdin.readLineSync();
-
   while (true) {
-    if (inputName != null && inputName.isNotEmpty) {
-      break; // 입력을 하면반복 종료
+    print('어떤 학생의 점수를 확인하시겠습니까? (종료하려면 exit 입력): ');
+    String? inputName = stdin.readLineSync();
+
+    if (inputName == null || inputName.isEmpty) continue;
+    if (inputName == 'exit') break;
+
+    if (studentData.containsKey(inputName)) {
+      print('$inputName 학생의 점수는 ${studentData[inputName]}점 입니다.');
     } else {
-      // 입력안하면 계속 입력창 띄우기
-      print('학생 이름을 적으시오 : ');
-      inputName = stdin.readLineSync();
+      print('$inputName 학생은 없는 학생입니다.');
     }
   }
-  print('입력한 텍스트 : $inputName');
 }

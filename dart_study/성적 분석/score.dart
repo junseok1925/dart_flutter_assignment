@@ -43,11 +43,17 @@ void main() {
   Map<String, int> studentData = loadStudentData(filePath);
 
   while (true) {
-    print('어떤 학생의 점수를 확인하시겠습니까? (종료하려면 exit 입력): ');
+    print('어떤 학생의 점수를 확인하시겠습니까? (그만하려면 exit or 종료 입력): ');
     String? inputName = stdin.readLineSync();
 
     if (inputName == null || inputName.isEmpty) continue;
-    if (inputName == 'exit') break;
+
+    // 종료기능
+    if (inputName == 'exit' || inputName == '종료') {
+      print('종료합니다.');
+      break;
+    }
+    ;
 
     if (studentData.containsKey(inputName)) {
       print('$inputName 학생의 점수는 ${studentData[inputName]}점 입니다.');

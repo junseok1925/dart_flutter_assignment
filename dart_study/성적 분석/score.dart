@@ -40,7 +40,7 @@ Map<String, int> loadStudentData(String filePath) {
 
 void writeFile(String filename, String content) {
   final file = File(filename);
-  file.writeAsString(content);
+  file.writeAsStringSync(content);
   print('$filename 파일이 생성되었습니다.');
 }
 
@@ -64,7 +64,7 @@ void main() {
     if (studentData.containsKey(inputName)) {
       print('$inputName 학생의 점수는 ${studentData[inputName]}점 입니다.');
       writeFile(
-        '$inputName',
+        '$inputName.csv',
         '$inputName 학생의 점수는 ${studentData[inputName]}점 입니다.',
       );
       print('생성된 파일 이름은 : $inputName');

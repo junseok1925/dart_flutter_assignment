@@ -15,7 +15,10 @@ void main(List<String> arguments) async {
     );
     String? category = stdin.readLineSync();
     // 아예 종료
-    if (category == '6') break;
+    if (category == '6') {
+      print('종료합니다.');
+      break;
+    }
 
     switch (category) {
       case '1':

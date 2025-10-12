@@ -80,6 +80,7 @@ void main(List<String> arguments) async {
 
       case '5':
         saveAllData(studentData, '../data/summary.csv');
+        await delay(500); // 결과 확인 후 0.5초
         break;
 
       case '6':

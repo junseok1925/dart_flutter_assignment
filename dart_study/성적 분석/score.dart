@@ -63,6 +63,17 @@ void topStudent(Map<String, int> studentData) {
   print('우수생 : $topStudent (점수 : $topScore 점)');
 }
 
+void avg(Map<String, int> studentData) {
+  if (studentData.isEmpty) {
+    print('데이터가 없습니다.');
+    return;
+  }
+  int sum = studentData.values.reduce((a, b) => a + b);
+
+  double avgScore = sum / studentData.length;
+  print(avgScore);
+}
+
 void writeFile(String filename, String content) {
   try {
     final file = File(filename);
@@ -78,7 +89,7 @@ void main() {
   Map<String, int> studentData = loadStudentData(filePath);
 
   print('사용하실 기능을 선택 하시오. ');
-  print('(1: 우수 학생 점수 확인, 2: 학생 전체 평균 점수 확인, 3: 특정 학생 점수 조회, 4. 종료)');
+  print('(1: 우수 학생 점수 확인, 2: 학생 전체 평균 점수 확인, 3: 특정 학생 점수 조회)');
   String? category = stdin.readLineSync();
 
   switch (category) {
@@ -87,7 +98,9 @@ void main() {
       topStudent(studentData);
 
     case '2': // 학생 전체 평균 점수 확인
-      print('아직 구현 전입니다.');
+      print('학생 전체의 평균을 구합니다.');
+      avg(studentData);
+
       break;
     case '3':
       while (true) {
@@ -114,9 +127,5 @@ void main() {
           print('$inputName 학생은 없는 학생입니다.');
         }
       }
-
-    case '4':
-      print('종료합니다.');
-      break;
   }
 }

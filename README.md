@@ -6,6 +6,7 @@
 
 ## 프로젝트 구조
 
+```
 project_root/
 ├─ bin/
 │ └─ score.dart # 실행 파일
@@ -14,6 +15,7 @@ project_root/
 ├─ data/ # CSV 파일 저장 폴더
 ├─ students.csv # 초기 학생 데이터 CSV
 └─ README.md
+```
 
 ## 실행방법
 

@@ -8,7 +8,7 @@ class Student {
   Student(this.name, this.score);
 
   void showInfo() {
-    print('이름: $name,점수: $score');
+    print('============= 이름: $name,점수: $score =============');
   }
 }
 
@@ -27,23 +27,26 @@ Map<String, int> loadStudentData(String filePath) {
       }
       final parts = line.split(',');
       if (parts.length != 2) {
-        throw FormatException('잘못된 데이터 형식: $line');
+        throw FormatException('============= 잘못된 데이터 형식: $line =============');
       }
       String name = parts[0];
       int score = int.parse(parts[1]);
 
       studentMap.putIfAbsent(name, () => score);
+
+      // print(studentMap);
     }
   } catch (e) {
-    print("학생 데이터 가져오기 실패 $e");
+    print("============= 학생 데이터 가져오기 실패 $e =============");
     exit(1);
   }
 
-  print('csv파일에서 가져온 학생 점수 데이터 : $studentMap');
+  // print('============= csv파일에서 가져온 학생 점수 데이터 : $studentMap =============');
 
   return studentMap;
 }
 
+// 우수 학생 조회
 void topStudent(Map<String, int> studentData) {
   if (studentData.isEmpty) {
     print('데이터가 없습니다.');
@@ -65,21 +68,107 @@ void topStudent(Map<String, int> studentData) {
 
 void avg(Map<String, int> studentData) {
   if (studentData.isEmpty) {
-    print('데이터가 없습니다.');
+    print('============= 데이터가 없습니다. =============');
     return;
   }
   int sum = studentData.values.reduce((a, b) => a + b);
 
   double avgScore = sum / studentData.length;
-  print(avgScore);
+  print('학생 전체 평균은 $avgScore점 입니다.');
 }
 
+// 등급 나누기
+void studentGrades(Map<String, int> studentData) {
+  print('학생 데이터 확인 용 : $studentData');
+  if (studentData.isEmpty) {
+    print('============= 데이터가 없습니다. =============');
+    return;
+  }
+
+  // 점수를 내림차순으로 정렬
+  var sortedStudents = studentData.entries.toList()
+    ..sort((a, b) => b.value.compareTo(a.value));
+
+  int total = sortedStudents.length;
+  int grade1Count = (total * 0.3).ceil(); // 상위 30%
+  int grade2Count = (total * 0.4).ceil(); // 중간 40%
+  // 나머지 학생은 3등급
+
+  print('학생 등급 결과:');
+  for (int i = 0; i < sortedStudents.length; i++) {
+    String grade;
+    if (i < grade1Count) {
+      grade = '1등급';
+    } else if (i < grade1Count + grade2Count) {
+      grade = '2등급';
+    } else {
+      grade = '3등급';
+    }
+    print(
+      '${sortedStudents[i].key} -> 점수: ${sortedStudents[i].value}점 등급: $grade',
+    );
+  }
+}
+
+// 파일 생성
 void writeFile(String filename, String content) {
   try {
     final file = File(filename);
     file.writeAsStringSync(content);
-    print('$filename 파일이 생성되었습니다.');
+    print('============= 파일이 생성되었습니다. =============');
   } catch (e) {
-    print('파일 생성 실패: $e');
+    print('============= 파일 생성 실패: $e =============');
   }
 }
+
+// 한번에 모든 정보 .csv 파일로 생성해서 저장하기
+void saveAllData(Map<String, int> studentData, String filename) {
+  if (studentData.isEmpty) {
+    print('데이터가 없습니다.');
+    return;
+  }
+
+  // 1. 우수생
+  int topScore = studentData.values.reduce((a, b) => a > b ? a : b);
+  var topStudents = studentData.keys.where(
+    (name) => studentData[name] == topScore,
+  );
+
+  // 2. 평균 점수
+  double avgScore =
+      studentData.values.reduce((a, b) => a + b) / studentData.length;
+
+  // 3. 등급 계산
+  var sortedStudents = studentData.entries.toList()
+    ..sort((a, b) => b.value.compareTo(a.value));
+  int total = sortedStudents.length;
+  int grade1Count = (total * 0.3).ceil();
+  int grade2Count = (total * 0.4).ceil();
+
+  // CSV 문자열 생성
+  StringBuffer contents = StringBuffer();
+  contents.writeln('우수생: ${topStudents.join(", ")}');
+  contents.writeln('전체 평균: $avgScore');
+  for (int i = 0; i < sortedStudents.length; i++) {
+    String grade;
+    if (i < grade1Count) {
+      grade = '1등급';
+    } else if (i < grade1Count + grade2Count) {
+      grade = '2등급';
+    } else {
+      grade = '3등급';
+    }
+    contents.writeln(
+      '${sortedStudents[i].key},${sortedStudents[i].value},$grade',
+    );
+  }
+
+  // 파일 생성
+  writeFile(filename, contents.toString());
+  print('모든 학생 데이터가 $filename 파일로 저장되었습니다.');
+}
+
+// 1초 딜레이 함수
+// int ms = 0 -> 매개변수 값 없을 시 기본 딜레이 시간 0으로 지정
+Future<void> delay([int ms = 0]) async =>
+    await Future.delayed(Duration(milliseconds: ms));

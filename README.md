@@ -7,7 +7,8 @@
 ## 프로젝트 구조
 
 ```
-project_root/
+dart_flutter_assignment/
+score_advanced/
 ├─ bin/
 │ └─ score.dart # 실행 파일
 ├─ lib/

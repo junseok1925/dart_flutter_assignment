@@ -17,6 +17,8 @@ Map<String, int> loadStudentData(String filePath) {
   try {
     final file = File(filePath);
     final line = file.readAsLinesSync(); // -> csv파일의 각 줄을 리스트로 가져옴
+    // print(line);
+    // print(line.runtimeType);
 
     for (var line in line) {
       final parts = line.split(',');
@@ -26,7 +28,10 @@ Map<String, int> loadStudentData(String filePath) {
       String name = parts[0];
       int score = int.parse(parts[1]);
 
+      //studentMap안에 name이라는 key가 없으면 그 key를 추가하소 score를 value로 넣기
       studentMap.putIfAbsent(name, () => score);
+
+      print('studentMap : $studentMap');
     }
   } catch (e) {
     print("학생 데이터 가져오기 실패 $e");
@@ -38,12 +43,6 @@ Map<String, int> loadStudentData(String filePath) {
   return studentMap;
 }
 
-void writeFile(String filename, String content) {
-  final file = File(filename);
-  file.writeAsStringSync(content);
-  print('$filename 파일이 생성되었습니다.');
-}
-
 void main() {
   String filePath = 'score.csv';
   Map<String, int> studentData = loadStudentData(filePath);
@@ -53,21 +52,13 @@ void main() {
     String? inputName = stdin.readLineSync();
 
     if (inputName == null || inputName.isEmpty) continue;
-
-    // 종료기능
     if (inputName == 'exit' || inputName == '종료') {
       print('종료합니다.');
       break;
     }
-    ;
 
     if (studentData.containsKey(inputName)) {
       print('$inputName 학생의 점수는 ${studentData[inputName]}점 입니다.');
-      writeFile(
-        '$inputName.csv',
-        '$inputName 학생의 점수는 ${studentData[inputName]}점 입니다.',
-      );
-      print('생성된 파일 이름은 : $inputName');
     } else {
       print('$inputName 학생은 없는 학생입니다.');
     }

@@ -6,7 +6,9 @@
 
 ## 프로젝트 구조
 
-project_root/
+```
+dart_flutter_assignment/
+score_advanced/
 ├─ bin/
 │ └─ score.dart # 실행 파일
 ├─ lib/
@@ -14,6 +16,7 @@ project_root/
 ├─ data/ # CSV 파일 저장 폴더
 ├─ students.csv # 초기 학생 데이터 CSV
 └─ README.md
+```
 
 ## 실행방법
 

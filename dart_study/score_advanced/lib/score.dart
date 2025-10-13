@@ -142,8 +142,9 @@ void saveAllData(Map<String, int> studentData, String filename) {
   var sortedStudents = studentData.entries.toList()
     ..sort((a, b) => b.value.compareTo(a.value));
   int total = sortedStudents.length;
-  int grade1Count = (total * 0.3).ceil();
-  int grade2Count = (total * 0.4).ceil();
+  int grade1Count = (total * 0.1).ceil(); // 상위 10프로
+  int grade2Count = (total * 0.2).ceil(); // 상위 20프로
+  int grade3Count = (total * 0.3).ceil(); // 상위 30프로... 나머지는 4등급
 
   // CSV 문자열 생성
   StringBuffer contents = StringBuffer();
@@ -155,9 +156,12 @@ void saveAllData(Map<String, int> studentData, String filename) {
       grade = '1등급';
     } else if (i < grade1Count + grade2Count) {
       grade = '2등급';
-    } else {
+    } else if (i < grade2Count + grade3Count) {
       grade = '3등급';
+    } else {
+      grade = '4등급'; // 나머지는 4등급
     }
+    ;
     contents.writeln(
       '${sortedStudents[i].key},${sortedStudents[i].value},$grade',
     );
